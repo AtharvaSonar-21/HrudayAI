@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: hrudayai_user
       POSTGRES_PASSWORD: local_dev_password
     ports:
-      - "5432:5432"
+      - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -20,3 +20,5 @@ services:
 
 volumes:
   postgres_data:
+    external: true
+    name: d26124fd3369b62bb46f42d15efb7780be177e4097930b8f6a52d9da97d4e638

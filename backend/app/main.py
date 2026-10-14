@@ -2,14 +2,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import check_database_connection
+from app.core.database import Base, check_database_connection, engine
+import app.models
+from app.api.patients import router as patients_router
 
 app = FastAPI(
     title="HrudayAI API",
-    description="Cardiovascular clinical decision support research prototype",
+    description="Cardiovascular clinical decision support research platform",
     version="0.1.0",
 )
 
-# Allow the local Vite frontend to call the backend.
+app.include_router(patients_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -49,3 +53,8 @@ def database_health_check():
             status_code=503,
             detail="Database connection failed",
         )
+
+@app.on_event("startup")
+def create_tables():
+    Base.metadata.create_all(bind=engine)
+
